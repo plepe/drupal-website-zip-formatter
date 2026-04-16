@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_module_info().
+ */
+function website_zip_formatter_module_info() {
+  return [
+    'name' => 'ZIP Formatter',
+    'description' => 'Serve static websites from ZIP files..',
+  ];
+}

@@ -1,0 +1,5 @@
+name: Website ZIP Formatter
+type: module
+description: Serve static websites from ZIP files.
+core_version_requirement: ^10
+package: Custom
