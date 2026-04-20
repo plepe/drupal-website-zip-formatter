@@ -8,6 +8,7 @@ use Drupal\file\Entity\FileInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\File\FileSystemInterface;
+use Symfony\Component\Mime\MimeTypes;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -64,7 +65,7 @@ class PrintZipController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    $content_type = 'text/plain; charset=UTF-8';
+    $content_type = \Drupal::service('file.mime_type.guesser.extension')->guessMimeType($path);
 
     $contents = $zip->getFromName($path);
     $zip->close();
