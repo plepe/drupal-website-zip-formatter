@@ -90,6 +90,7 @@ class PrintZipController extends ControllerBase {
     return new Response($contents, 200, [
       'Content-Length' => $info['size'],
       'Content-Type' => "{$content_type};charset=UTF-8",
+      'Cache-Control' => 'max-age=604800',
       'Last-Modified' => gmdate("D, d M Y H:i:s T", $info['mtime'])
     ]);
   }
