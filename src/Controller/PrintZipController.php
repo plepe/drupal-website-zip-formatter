@@ -11,6 +11,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\Mime\MimeTypes;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Url;
 
 /**
  * Controller to extract files from ZIP and return them for display/download.
@@ -57,6 +58,22 @@ class PrintZipController extends ControllerBase {
     if ($zip->open($realpath) !== TRUE) {
       $this->logger->error('Failed to open ZIP file @fid', ['@fid' => $file->id()]);
       throw new NotFoundHttpException();
+    }
+
+    if ($path === '') {
+      $index_files = ['index.htm', 'index.html'];
+      $found_files = array_filter($index_files, function ($index_file) use ($zip) {
+       return $zip->statName($index_file);
+      });
+
+      if (!sizeof($found_files)) {
+        throw new NotFoundHttpException();
+      }
+
+      $url = Url::fromRoute('website_zip_formatter.print', ['file' => $file->id(), 'path' => array_values($found_files)[0]]);
+      return new Response('', 301, [
+        'Location' => $url->toString(),
+      ]);
     }
 
     $info = $zip->statName($path);
