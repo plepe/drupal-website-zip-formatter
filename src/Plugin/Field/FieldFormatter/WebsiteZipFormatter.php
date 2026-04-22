@@ -57,7 +57,8 @@ class WebsiteZipFormatter extends FormatterBase {
 
       if ($file) {
         $url = Url::fromRoute('website_zip_formatter.print', ['file' => $file->id(), 'path' => '/']);
-        $link = Link::fromTextAndUrl($this->getSetting('link_text'), $url);
+        $text = $this->getSetting('link_text') ?: $item->description ?: $file->getFilename();
+        $link = Link::fromTextAndUrl($text, $url);
         $elements[$delta] = $link->toRenderable();
       }
       else {
