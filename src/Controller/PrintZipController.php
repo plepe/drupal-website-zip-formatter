@@ -83,13 +83,18 @@ class PrintZipController extends ControllerBase {
     }
 
     $content_type = \Drupal::service('file.mime_type.guesser.extension')->guessMimeType($path);
+    $charset = 'UTF-8';
+    if (preg_match('/\.wasm$/i', $path)) {
+      $content_type = 'application/wasm';
+      $charset = null;
+    }
 
     $contents = $zip->getFromName($path);
     $zip->close();
 
     return new Response($contents, 200, [
       'Content-Length' => $info['size'],
-      'Content-Type' => "{$content_type};charset=UTF-8",
+      'Content-Type' => $content_type . ($charset ? ";charset={$charset}" : ''),
       'Cache-Control' => 'max-age=604800',
       'Last-Modified' => gmdate("D, d M Y H:i:s T", $info['mtime'])
     ]);
