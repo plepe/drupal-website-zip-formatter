@@ -1,5 +1,5 @@
 name: Website ZIP Formatter
 type: module
 description: Serve static websites from ZIP files.
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 package: Custom
